@@ -40,9 +40,9 @@ enum Alert {
     var message: String {
         switch self {
         case .success:
-            return "You can see the results in the Debug aria"
+            return "You can see the results in the Debug area"
         case .failed:
-            return "You can see error in the Debug aria"
+            return "You can see error in the Debug area"
         }
     }
 }
@@ -107,25 +107,95 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - Networking
 extension MainViewController {
     private func fetchCourse() {
+        guard let url = URL(string: Link.courseURL.rawValue) else { return }
         
-        
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data else {
+                print(error?.localizedDescription ?? "No error desctiption")
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                let course = try decoder.decode(Course.self, from: data)
+                print(course)
+                self?.showAlert(with: .success)
+            } catch let error {
+                self?.showAlert(with: .failed)
+                print(error.localizedDescription)
+            }
+            
+        }.resume()
     }
     
     private func fetchCourses() {
+        guard let url = URL(string: Link.coursesURL.rawValue) else { return }
         
-        
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data else {
+                print(error?.localizedDescription ?? "No error desctiption")
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                let courses = try decoder.decode([Course].self, from: data)
+                print(courses)
+                self?.showAlert(with: .success)
+            } catch let error {
+                self?.showAlert(with: .failed)
+                print(error.localizedDescription)
+            }
+            
+        }.resume()
     }
     
     private func fetchInfoAboutUs() {
+        guard let url = URL(string: Link.aboutUsURL.rawValue) else { return }
         
-        
-        
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data else {
+                print(error?.localizedDescription ?? "No error desctiption")
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                let info = try decoder.decode(SwiftbookInfo.self, from: data)
+                print(info)
+                self?.showAlert(with: .success)
+            } catch let error {
+                self?.showAlert(with: .failed)
+                print(error.localizedDescription)
+            }
+            
+        }.resume()
     }
     
     private func fetchInfoAboutUsWithEmptyFields() {
+        guard let url = URL(string: Link.aboutUsURL2.rawValue) else { return }
         
-        
-        
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data else {
+                print(error?.localizedDescription ?? "No error desctiption")
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                let info = try decoder.decode(SwiftbookInfo.self, from: data)
+                print(info)
+                self?.showAlert(with: .success)
+            } catch let error {
+                self?.showAlert(with: .failed)
+                print(error)
+            }
+            
+        }.resume()
     }
 }
 
