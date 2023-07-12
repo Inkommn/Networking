@@ -1,37 +1,42 @@
 //
-//  ViewController.swift
+//  ImageViewController.swift
 //  Networking
 //
-//  Created by Alexey Efimov on 01/10/2018.
-//  Copyright © 2018 Alexey Efimov. All rights reserved.
+//  Created by Shamkhan Mutuskhanov on 11.07.2023.
 //
 
 import UIKit
 
 final class ImageViewController: UIViewController {
-
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
-    private let networkManager = NetworkManager.shared
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet var imageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         activityIndicator.startAnimating()
         activityIndicator.hidesWhenStopped = true
         fetchImage()
+        
     }
-
-    private func fetchImage() {            
-        networkManager.fetchImage(from: Link.imageURL.url) { [weak self] result in
-            switch result {
-            case .success(let imageData):
-                self?.imageView.image = UIImage(data: imageData)
-                self?.activityIndicator.stopAnimating()
-            case .failure(let error):
-                print(error)
+    
+    private func fetchImage() {
+        guard let url = URL(string: Link.imageURL.rawValue) else { return }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            guard let data = data, let response = response else {
+                print(error?.localizedDescription ?? "No error description")
+                return
             }
-        }
+            
+            print(response)
+            guard let image = UIImage(data: data) else { return }
+            
+            DispatchQueue.main.async {
+                self?.imageView.image = image
+                self?.activityIndicator.stopAnimating()
+            }
+        }.resume()
     }
 }
-
