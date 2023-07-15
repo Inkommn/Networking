@@ -9,12 +9,9 @@ import UIKit
 
 final class ImageViewController: UIViewController {
     
-    // MARK: - IBOutlets
-    
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var imageView: UIImageView!
     
-    // MARK: - Override methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,7 +20,6 @@ final class ImageViewController: UIViewController {
         fetchImage()
     }
     
-    // MARK: - Private methods
     private func fetchImage() {
         NetworkManager.shared.fetchImage(from: Link.imageURL.rawValue) { [weak self] result in
             switch result {

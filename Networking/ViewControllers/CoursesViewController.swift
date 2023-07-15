@@ -9,10 +9,8 @@ import UIKit
 
 final class CoursesViewController: UITableViewController {
     
-    // MARK: - Private methods
     private var courses: [Course] = []
 
-    // MARK: - Override methods
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 100
