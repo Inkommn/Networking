@@ -123,7 +123,7 @@ final class NetworkManager {
                 print(error?.localizedDescription ?? "No error description")
                 return
             }
-        
+            
             do {
                 let course = try JSONDecoder().decode(Course.self, from: data)
                 completion(.success(course))
